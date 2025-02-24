@@ -1,0 +1,19 @@
+<nav class="navbar">
+    <!-- Logo and Site name -->
+    <div class="navbar-logo">
+        <!-- Will add logo later -->
+        <a href="{% url 'home' %}">BloggingApp</a>
+    </div>
+
+    <div class="navbar-link">
+        <!-- add avatar later -->
+        <a href="#">My Profile</a>
+
+        {% if user.is_authenticated %}
+            <a href="#">Log Out</a>
+        {% else %}
+            <a href="#">Log In</a>
+            <a href="#">Sign Up</a>
+        {% endif %}
+    </div>
+</nav>
