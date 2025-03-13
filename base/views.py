@@ -1,5 +1,6 @@
-from django.shortcuts import render, redirect # type: ignore
-from django.contrib.auth import login, authenticate, logout # type: ignore
+from django.shortcuts import render, redirect
+from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from .forms import SignupForm, LoginForm
 from .models import CustomUser
 
@@ -46,7 +47,6 @@ def logout_view(request):
     logout(request)
     return redirect('login')
 
+@login_required(login_url='login')
 def home(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
     return render(request, 'home.html')

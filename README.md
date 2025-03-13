@@ -11,7 +11,8 @@ This is a **blogging application** built using the **Django framework**. It allo
 
 - **Previous Version Started:** *November 2024* (Paused due to custom user model issues)  
 - **Current Version Started:** *February 2025*
-🚀 Next Milestone: Implementing user authentication (signup, login, logout) and basic blog post creation.
+✔ User Authentication (Signup, Login, Logout) Completed
+🚀 Next Milestone: Implementing blog post creation, including a sub-form for categories.
 
 ### ⚠️ Why a New Repository?  
 
@@ -24,14 +25,15 @@ A previous version of this project was paused due to **issues faced while implem
 So far, the following have been implemented:  
 ✔ **Custom User Model** – Implemented from the beginning  
 ✔ **Database Models** – Post, Category, Tag, User  
-✔ **Base Templates** – `main.html`, `navbar.html`, and a dummy `home.html`  
+✔ **Base Templates** – `main.html`, `navbar.html`, and a dummy `home.html`
+✔ User Authentication (Signup, Login, Logout) implemented – Users must log in to access the home page (@login_required enforced).  
 
 🔜 **Next Steps:**  
 
-- Implement **User Authentication (Signup, Login, Logout)**  
 - Add **Blog Post Features** (Create, Edit, Delete, View)  
-- Integrate **Categories & Tags System**  
-- Develop **Profile Management & User Dashboard**  
+- Integrate **Categories & Tags System**
+- Add **Category Sub-Form** for **New Categories**
+- Display Posts on **Home Page**
 
 ---
 
