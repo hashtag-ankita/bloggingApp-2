@@ -5,13 +5,7 @@
 
 This is a **blogging application** built using the **Django framework**. It allows users to **write, categorize, and tag blog posts** while managing their profiles. The platform is designed for a **smooth and user-friendly experience**, making it easy for users to create and share their thoughts.
 
-**Note:** The name of the project is yet to be finalized, so it will temporarily be referred to as "Blogging Application".
-
-That would be a good idea! It helps track progress and makes it clear when this version of the project started. You can add something like this under the **"About the Project"** section:  
-
-📅 **Start Date (This Version):** *February 2025*  
-
-Or, if you want a more detailed approach, add a **Project Timeline** section at the end:  
+**Note:** The name of the project is yet to be finalized, so it will temporarily be referred to as "Blogging Application". 
 
 ### 📅 Project Timeline  
 
