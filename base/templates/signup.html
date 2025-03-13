@@ -1,0 +1,24 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h1 class="title">Sign Up</h1>
+
+<div class="error-container"></div>
+
+<div class="form-container">
+    <form action="" method="post" class="form-group">
+        {% csrf_token %}
+        {% for field in form %}
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        <div class="form-control">{{ field }}</div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+
+        <p>Already have an account? <a href="{% url 'login' %}">Log In</a></p>
+    </form>
+</div>
+
+{% endblock %}

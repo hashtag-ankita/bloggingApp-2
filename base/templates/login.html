@@ -1,0 +1,26 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<h1 class="title">Login</h1>
+
+{% if error %}
+    <p>{{error}}</p>
+{% endif %}
+<div class="form-container">
+    <form action="" method="post" class="form-group">
+        {% csrf_token %}
+        {% for field in form %}
+        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+        <div class="form-control">{{ field }}</div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Log In</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+
+        <p>Don't have an account? <a href="{% url 'signup' %}">Sign Up</a></p>
+        <p>Forgot your password? <a href="#">Reset Password</a></p>
+    </form>
+</div>
+
+{% endblock %}
