@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .forms import SignupForm, LoginForm
-from .models import CustomUser
+from .models import CustomUser, Post, Category, Tag
 
 # Create your views here.
 def signup_view(request):
@@ -49,4 +49,13 @@ def logout_view(request):
 
 @login_required(login_url='login')
 def home(request):
-    return render(request, 'home.html')
+    posts = Post.objects.all()
+    categories = Category.objects.all()
+    tags = Tag.objects.all()
+
+    context = {
+        'posts': posts,
+        'categories': categories,
+        'tags': tags,
+    }
+    return render(request, 'home.html', context)

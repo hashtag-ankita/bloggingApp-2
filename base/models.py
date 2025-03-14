@@ -25,13 +25,12 @@ class CustomUserManager(BaseUserManager):
 
         return self.create_user(email, password, **extra_fields)
 
-
 class CustomUser(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=100, unique=True, blank=True, null=True)
     display_name = models.CharField(max_length=100, blank=True, null=True, default='Anonymous')
     bio = models.TextField(blank=True, null=True)
-    # profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+    profile_picture = models.ImageField(blank=True, null=True, upload_to='profile_pictures/', default='')
     
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -74,7 +73,7 @@ class Category(models.Model):
         verbose_name_plural = 'Categories'
 
     def __str__(self):
-        return self.name.capitalize() # Keep original capitalization
+        return self.name # Keep original capitalization
     
     def save(self, *args, **kwargs):
         self.name = self.name.lower() # Store in lowercase for consistency
@@ -89,7 +88,7 @@ class Tag(models.Model):
         verbose_name_plural = 'Tags'
 
     def __str__(self):
-        return self.name.capitalize()
+        return self.name
     
     def save(self, *args, **kwargs):
         self.name = self.name.lower()
@@ -103,8 +102,7 @@ class Post(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, related_name='posts')
 
     created_at = models.DateTimeField(auto_now_add=True)
-    # Will add this when posts can be editted too.
-    # updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title

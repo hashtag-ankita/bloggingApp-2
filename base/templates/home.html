@@ -1,15 +1,33 @@
 {% extends 'main.html' %}
+{% load static %}
 
 {% block content %}
 
 <div class="home-container">
-    <div class="home-header">
-        {% if request.user.is_authenticated %}
-            <h2>Welcome back, {{request.user.username}}!</h2>
-        {% else %}
-            <h2>Welcome to bloggingApp, stranger!</h2>
-        {% endif %}
+
+    <div class="home-header" style="text-align: center;">
+        <h2>Welcome back, {{ request.user.username }}!</h2>
+        <div class="start-blog-container">
+            <a href="#" class="start-blog-link">
+                <input type="text" placeholder="Start your blog here..." readonly class="start-blog-box">
+            </a>
+        </div>
     </div>
+
+    <div class="home-body" style="display: grid;
+        grid-template-columns: 3fr 1fr;
+        column-gap: 20px;">
+
+        <div class="home-feed">
+            {% include 'feed_component.html' %}
+        </div>
+
+        <div class="home-sidebar">
+            {% include 'sidebar_component.html' %}
+        </div>
+
+    </div>
+
 </div>
 
 {% endblock %}

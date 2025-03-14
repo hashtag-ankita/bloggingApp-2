@@ -1,0 +1,50 @@
+{% load static %}
+<!-- User Profile Card -->
+<div class="sidebar-profile">
+   {% if request.user.profile_picture %}
+   <img src="{{ request.user.profile_picture.url }}" alt="{{ request.user.username }}"
+      style="width: 80px; height: 80px; border-radius: 50%; aspect-ratio: 1;">
+   {% else %}
+   <img src="{% static 'images/avatar.svg' %}" alt="default avatar"
+      style="width: 80px; height: 80px; border-radius: 50%; aspect-ratio: 1;">
+   {% endif %}
+   <h4 class="profile-display-name">{{ request.user.display_name }}</h4>
+   <p class="profile-username">@{{ request.user.username }}</p>
+   <p class="profile-blog-count">Blogs Posted: <span>0</span></p>
+   <a href="#" class="view-profile-btn">View Profile</a>
+</div>
+
+<hr>
+<!-- Daily Writing Prompt -->
+<div class="sidebar-writing-prompt">
+   <h4 class="prompt-header">Daily Writing Prompt</h4>
+   <p class="prompt-text">"What’s a childhood memory that still makes you smile?"</p>
+   <a href="#" class="new-prompt-btn">Get a New Prompt</a>
+</div>
+
+<hr>
+<!-- Word of the Day -->
+<div class="sidebar-word-of-the-day">
+   <h4 class="word-header">Word of the Day</h4>
+   <p class="word-text"><strong>Pernicious</strong> - <em>Having a harmful effect, especially in a gradual way.</em></p>
+   <a href="#" class="word-details-link">See More</a>
+</div>
+
+<hr>
+<!-- Quote of the Day -->
+<div class="sidebar-qotd">
+   <h4 class="qotd-header">Quote of the Day</h4>
+   <p class="qotd-quote">"The greatest glory in living lies not in never falling, but in rising every time we fall."</p>
+   <p class="qotd-author">- Nelson Mandela</p>
+</div>
+
+<hr>
+<!-- !Followed Categories (Future feature) -->
+<div class="sidebar-followed-categories">
+   <h4 class="categories-header">Followed Categories</h4>
+   <ul class="categories-list">
+      <li><a href="#">Technology</a></li>
+      <li><a href="#">Self-improvement</a></li>
+      <li><a href="#">Creative Writing</a></li>
+   </ul>
+</div>
