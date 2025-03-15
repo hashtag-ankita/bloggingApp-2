@@ -1,0 +1,25 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="add-category-container">
+    <form action="" method="post">
+        <h2 class="add-category-header">Add a New Category:</h2>
+
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="form-group">
+            {{ form.name }}
+            <div class="form-error">
+                {% if form.name.errors %}
+                    <small class="text-danger">{{ form.name.errors.0 }}</small>
+                {% endif %}
+            </div>
+        </div>
+
+        <button type="submit" class="add-category-button">Add Category</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import SignupForm, LoginForm, PostForm
+from .forms import SignupForm, LoginForm, PostForm, CategoryForm
 from .models import CustomUser, Post, Category, Tag
 
 # Create your views here.
@@ -84,4 +84,11 @@ def createPost(request):
         return render(request, 'create_post.html', {'form': form})
 
 def addCategory(request):
-    return render(request, 'add_category.html')
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = CategoryForm()
+    return render(request, 'add_category.html', {'form': form})

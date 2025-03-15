@@ -18,7 +18,7 @@
             {% if field.name == "category" %}
             <span class="category-message">
                 Can't find a suitable category for your blog? Add one:
-                <a href="#" class="add-category">Add new category</a>
+                <a href="{% url 'add-category' %}" class="add-category">Add new category</a>
             </span>
             <br>
             {% endif %}
