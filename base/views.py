@@ -59,3 +59,10 @@ def home(request):
         'tags': tags,
     }
     return render(request, 'home.html', context)
+
+
+def createPost(request):
+    return render(request, 'create_post.html')
+
+def addCategory(request):
+    return render(request, 'add_category.html')
