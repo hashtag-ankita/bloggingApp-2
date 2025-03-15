@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import get_user_model
+from .models import Post, Category, Tag
 
 CustomUser = get_user_model()
 
@@ -43,3 +44,45 @@ class LoginForm(forms.Form):
 
     def clean_email(self):
         return self.cleaned_data['email'].lower()  # Normalize email
+    
+
+class PostForm(forms.ModelForm):
+    class Meta:
+        model = Post
+        fields = ['title', 'content', 'category', 'tags']
+
+    title = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter the title',
+        })
+    )
+
+    content = forms.CharField(
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter the content',
+        })
+    )
+
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        empty_label="Select a category",
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+        })
+    )
+
+    tags = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter tags separated by commas',
+        })
+    )
+
+    def clean_tags(self):
+        '''Optional: Validate and process the tags field, if provided'''
+        tags_input = self.cleaned_data.get('tags', '')
+        tags_list = [tag.strip() for tag in tags_input.split(',') if tag.strip()]
+        return tags_list # Return a list of clean tags

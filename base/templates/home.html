@@ -8,7 +8,7 @@
     <div class="home-header" style="text-align: center;">
         <h2>Welcome back, {{ request.user.username }}!</h2>
         <div class="start-blog-container">
-            <a href="#" class="start-blog-link">
+            <a href="{% url 'create-post' %}" class="start-blog-link">
                 <input type="text" placeholder="Start your blog here..." readonly class="start-blog-box">
             </a>
         </div>
