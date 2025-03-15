@@ -86,3 +86,22 @@ class PostForm(forms.ModelForm):
         tags_input = self.cleaned_data.get('tags', '')
         tags_list = [tag.strip() for tag in tags_input.split(',') if tag.strip()]
         return tags_list # Return a list of clean tags
+    
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+
+    name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Enter the category name',
+        })
+    )
+
+    def clean_name(self):
+        name = self.cleaned_data.get('name', '').strip() # Normalize the category name
+        if Category.objects.filter(name__iexact=name).exists(): # Case-insensitive check
+            raise forms.ValidationError("This category name already exists!")
+        return name # Return the cleaned category name
