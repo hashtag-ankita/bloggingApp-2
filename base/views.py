@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import SignupForm, LoginForm
+from .forms import SignupForm, LoginForm, PostForm
 from .models import CustomUser, Post, Category, Tag
 
 # Create your views here.
@@ -62,7 +62,26 @@ def home(request):
 
 
 def createPost(request):
-    return render(request, 'create_post.html')
+    if request.method == 'POST':
+        form = PostForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit=False) # Save the post without committing
+            post.author = request.user # Set the author of the post
+            post.save() # Save the post instance
+
+            tags_list = form.cleaned_data.get('tags', [])
+            for tag_name in tags_list:
+                tag, created = Tag.objects.get_or_create(name=tag_name)
+                post.tags.add(tag)
+
+            post.save()
+
+            return redirect('home') # redirect to the home page on successful submission
+        else:
+            return redirect(request, 'create_post.html', {'form': form})
+    else:
+        form = PostForm()
+        return render(request, 'create_post.html', {'form': form})
 
 def addCategory(request):
     return render(request, 'add_category.html')
