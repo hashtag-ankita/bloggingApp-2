@@ -1,0 +1,113 @@
+<!-- profile_page.html -->
+{% extends 'main.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    .profile-container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+    }
+
+    .profile-header {
+        border: 1px solid #ddd;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .profile-picture {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+        margin: 10px auto;
+    }
+
+    .edit-btn,
+    .follow-btn {
+        display: inline-block;
+        margin-top: 10px;
+        padding: 5px 10px;
+    }
+
+    .profile-body {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+    }
+
+    .profile-details-card {
+        border: 1px solid #ddd;
+        padding: 20px;
+    }
+
+    .profile-blogs-section {
+        border: 1px solid #ddd;
+        padding: 20px;
+    }
+
+    .blog-card {
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+</style>
+<div class="profile-container">
+    <!-- Header Section -->
+    <div class="profile-header">
+        <h2>{{ user.username }}'s Profile</h2>
+        {% if user.profile_picture %}
+        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+        {% else %}
+        <img src="{% static 'images/avatar.svg' %}" alt="Profile Picture" class="profile-picture">
+        {% endif %}
+        <p>@{{ user.username }}</p>
+        <p>Joined on {{ user.created_at|date:"F d, Y" }}</p>
+        {% if user.is_staff %}
+        <p><span>🪪 Staff {% if user.is_superuser %}🛡️{% endif %}</span></p>
+        {% endif %}
+        {% if request.user == user %}
+        <a href="{% url 'edit-profile' %}" class="edit-btn">Edit Profile</a>
+        {% else %}
+        <!-- {% if is_following %}
+        <form action="" method="post">{% csrf_token %}
+            <button type="submit" class="follow-btn">Unfollow</button>
+        </form>
+        {% else %} -->
+        <form action="" method="post">{% csrf_token %}
+            <button type="submit" class="follow-btn">Follow</button>
+        </form>
+        <!-- {% endif %} -->
+        {% endif %}
+    </div>
+
+    <!-- Body Section -->
+    <div class="profile-body">
+        <div class="profile-details-card">
+            <h3>About</h3>
+            <p><strong>Display name:</strong> {{ user.display_name }}</p>
+            <p><strong>Bio:</strong> {{ user.bio|default:"No bio added." }}</p>
+            <p><strong>Followers:</strong> 0</p>
+            <p><strong>Following:</strong> 0</p>
+        </div>
+
+        <div class="profile-blogs-section">
+            <h3>Blogs ({{ blogs.count }})</h3>
+            {% for blog in blogs.all %}
+            <div class="blog-card">
+                <h4><a href="#">{{ blog.title }}</a></h4>
+                <p>{{ blog.created_at|date:"F d, Y" }}</p>
+                <p>{{ blog.content|truncatewords:25 }}</p>
+                <a href="#">Read more</a>
+            </div>
+            {% empty %}
+            <p>No blogs yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

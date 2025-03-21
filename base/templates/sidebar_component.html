@@ -11,7 +11,7 @@
    <h4 class="profile-display-name">{{ request.user.display_name }}</h4>
    <p class="profile-username">@{{ request.user.username }}</p>
    <p class="profile-blog-count">Blogs Posted: <span>0</span></p>
-   <a href="#" class="view-profile-btn">View Profile</a>
+   <a href="{% url 'profile' request.user.username %}" class="view-profile-btn">View Profile</a>
 </div>
 
 <hr>

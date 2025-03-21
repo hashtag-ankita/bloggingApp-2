@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from .forms import SignupForm, LoginForm, PostForm, CategoryForm
@@ -43,9 +43,23 @@ def login_view(request):
                 print(error)
     return render(request, 'login.html', {'form':form})
 
+@login_required(login_url='login')
 def logout_view(request):
     logout(request)
     return redirect('login')
+
+@login_required(login_url='login')
+def profile_view(request, username):
+    user = get_object_or_404(CustomUser,  username=username)
+
+    # Get blogs by this user
+    blogs = Post.objects.filter(author=user)
+
+    context = {
+        'user': user,
+        'blogs': blogs,
+    }
+    return render(request, 'profile_details.html', context)
 
 @login_required(login_url='login')
 def home(request):
@@ -60,7 +74,7 @@ def home(request):
     }
     return render(request, 'home.html', context)
 
-
+@login_required(login_url='login')
 def createPost(request):
     if request.method == 'POST':
         form = PostForm(request.POST)
@@ -83,6 +97,12 @@ def createPost(request):
         form = PostForm()
         return render(request, 'create_post.html', {'form': form})
 
+@login_required(login_url='login')
+def editProfile(request):
+    # user = request.user
+    return render(request, 'edit_profile.html')
+
+@login_required(login_url='login')
 def addCategory(request):
     if request.method == 'POST':
         form = CategoryForm(request.POST)

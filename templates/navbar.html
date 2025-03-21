@@ -8,18 +8,17 @@
     </div>
 
     <div class="navbar-link">
-        <a href="#">
-        {% if request.user.profile_picture %}
-        <img src="{{ request.user.profile_picture.url }}" alt="{{ request.user.username }}"
-            style="width: 40px; height: 40px; border-radius: 50%; aspect-ratio: 1;">
-        {% else %}
-        <img src="{% static 'images/avatar.svg' %}" alt="default avatar"
-            style="width: 40px; height: 40px; border-radius: 50%; aspect-ratio: 1;">
-        {% endif %}
-        My Profile
-        </a>
-
         {% if user.is_authenticated %}
+        <a href="{% url 'profile' request.user.username %}">
+            {% if request.user.profile_picture %}
+            <img src="{{ request.user.profile_picture.url }}" alt="{{ request.user.username }}"
+                style="width: 40px; height: 40px; border-radius: 50%; aspect-ratio: 1;">
+            {% else %}
+            <img src="{% static 'images/avatar.svg' %}" alt="default avatar"
+                style="width: 40px; height: 40px; border-radius: 50%; aspect-ratio: 1;">
+            {% endif %}
+            My Profile
+        </a>
         <a href="logout">Log Out</a>
         {% else %}
         <a href="login">Log In</a>
