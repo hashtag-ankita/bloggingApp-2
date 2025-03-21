@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import SignupForm, LoginForm, PostForm, CategoryForm
+from .forms import SignupForm, LoginForm, PostForm, CategoryForm, EditProfileForm
 from .models import CustomUser, Post, Category, Tag
 
 # Create your views here.
@@ -100,7 +100,17 @@ def createPost(request):
 @login_required(login_url='login')
 def editProfile(request):
     # user = request.user
-    return render(request, 'edit_profile.html')
+    
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', username=request.user.username)
+        else:
+            return render(request, 'edit_profile.html', {'form': form})
+    else:
+        form = EditProfileForm(instance=request.user)
+    return render(request, 'edit_profile.html', {'form': form})
 
 @login_required(login_url='login')
 def addCategory(request):

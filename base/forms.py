@@ -46,6 +46,57 @@ class LoginForm(forms.Form):
         return self.cleaned_data['email'].lower()  # Normalize email
     
 
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomUser
+        fields = ['profile_picture', 'username', 'display_name', 'email', 'bio']
+        widgets = {
+            'profile_picture': forms.ClearableFileInput()
+        }
+
+    def clean_username(self):
+        if not self.cleaned_data['username']:
+            raise forms.ValidationError("Please enter a new username.")
+        username = self.cleaned_data['username']
+
+        # replace the spaces with underscores
+        cleaned_username = username.replace(' ', '_').lower()
+        
+        # raise an error if the new username already exists, regardless of the case
+        if CustomUser.objects.filter(username__iexact=cleaned_username).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("Username not available. Please choose another one.")
+        
+        return cleaned_username
+    
+    def clean_email(self):
+        email = self.cleaned_data.get('email').strip().lower() # Normalize the email address
+
+        if CustomUser.objects.filter(email=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("This email is already registered. Try using another email.")
+        
+        return email
+        
+    def save(self, commit=True):
+        user = super().save(commit=False)
+
+        # Handle clearing the picture
+        if self.cleaned_data.get('profile_picture') is False:
+            if user.profile_picture:
+                user.profile_picture.delete(save=False)
+            user.profile_picture = None
+
+        # if new picture uploaded, delete the old one
+        elif self.cleaned_data.get('profile_picture'):
+            # if an old picture exists and is different, delete it
+            if self.instance.profile_picture and self.instance.profile_picture != self.cleaned_data.get('profile_picture'):
+                self.instance.profile_picture.delete(save=False)
+
+            user.profile_picture = self.cleaned_data.get('profile_picture')
+        
+        if commit:
+            user.save()
+        return user
+
 class PostForm(forms.ModelForm):
     class Meta:
         model = Post
