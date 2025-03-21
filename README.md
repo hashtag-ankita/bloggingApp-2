@@ -10,9 +10,10 @@ This is a **blogging application** built using the **Django framework**. It allo
 ### 📅 Project Timeline  
 
 - **Previous Version Started:** *November 2024* (Paused due to custom user model issues)  
-- **Current Version Started:** *February 2025*   
-✔ User Authentication (Signup, Login, Logout) Completed   
-🚀 Next Milestone: Implementing blog post creation, including a sub-form for categories.
+- **Current Version Started:** *February 2025*  
+✔ User Authentication (Signup, Login, Logout) Completed  
+✔ Blog post creation form (with sub-form for category creation) Completed  
+🚀 Next Milestone: Blog detail view and blog interaction features.  
 
 ### ⚠️ Why a New Repository?  
 
@@ -22,29 +23,43 @@ A previous version of this project was paused due to **issues faced while implem
 
 ## 🚧 Current Progress  
 
-So far, the following have been implemented:  
+The following features have been implemented:  
+
 ✔ **Custom User Model** – Implemented from the beginning  
-✔ **Database Models** – Post, Category, Tag, User     
-✔ **User Authentication (Signup, Login, Logout)** implemented – Users must log in to access the home page (`@login_required` enforced).  
+✔ **Database Models** – Post, Category, Tag, User  
+✔ **User Authentication (Signup, Login, Logout)** – Users must log in to access the home page (`@login_required` enforced).  
 ✔ **Base Templates** – `main.html`, `navbar.html`, and a structured `home.html` with *sidebar* and *blog feed*  
-✔ **Blog Feed** – Displays blog posts on the home page   
+✔ **Blog Feed** – Displays blog posts on the home page  
+
 ✔ **Sidebar Components**:  
-    - **User Profile Card** – Displays profile picture, username, display name, and number of blogs  
-    - **Daily Writing Prompt** – Encourages blogging with a writing prompt  
-    - **Word of the Day** – Placeholder, will fetch words from an API later  
-    - **Quote of the Day** – Placeholder, will use an API for daily quotes  
-    - **Followed Categories List** – Placeholder, to be implemented later  
+- **User Profile Card** – Displays profile picture, username, display name, and number of blogs  
+- **Daily Writing Prompt** – Encourages blogging with a writing prompt  
+- **Word of the Day** – Placeholder, will fetch words from an API later  
+- **Quote of the Day** – Placeholder, will use an API for daily quotes  
+- **Followed Categories List** – Placeholder, to be implemented later  
 
-🔜 **Next Steps:**
+✔ **Blog Post Creation**:  
+- Fully functional post-creation form  
+- Ability to select existing categories or create a new category via sub-form  
+- Multiple tags supported for each blog  
 
-- **Enhance Blog Post Creation**:  
-  - Implement post creation form  
-  - Add sub-form for creating categories if no suitable category exists  
-- **Refine Sidebar**:  
-  - Fetch daily quote from an API  
-  - Fetch word of the day from an API  
-  - Implement followed categories list  
-- **Develop Profile Management & User Dashboard**  
+✔ **Profile Management**:  
+- **View Profile Page** – Accessible for any user, displaying user details and their blog list  
+- **Header Section** – Displays profile picture, username, and account creation date  
+- **Role Icon** – Indicates if a user is a staff, admin, or a regular user  
+- **Follow/Unfollow Button** – (Placeholder for future implementation)  
+- **Edit Profile Feature** – Logged-in users can edit their profile picture, username, display name, email, and bio via a dedicated form  
+
+---
+
+### 🔜 Next Steps  
+
+- **Blog Detail Page** – Allow users to view the full content of a blog post when clicking on “Read More” or the blog title  
+- **Enhance Sidebar** –  
+  - Fetch daily quotes and word of the day from APIs  
+  - Display followed categories (when the following feature is implemented)  
+- **Following Feature** – Ability to follow other users and categories  
+- **Blog Interaction Features** – Add likes, comments, and sharing options  
 
 ---
 
