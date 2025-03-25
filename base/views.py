@@ -142,4 +142,10 @@ def viewCategory(request, category_name):
     return render(request, 'category_page.html', context)
 
 def viewTag(request, tag_id):
-    pass
+    tag = get_object_or_404(Tag, id=tag_id)
+    posts = Post.objects.filter(tags=tag)
+    context = {
+        'tag': tag,
+        'posts': posts,
+    }
+    return render(request, 'tag_page.html', context)

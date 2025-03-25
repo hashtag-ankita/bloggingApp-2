@@ -98,10 +98,10 @@
             <h3>Blogs ({{ blogs.count }})</h3>
             {% for blog in blogs.all %}
             <div class="blog-card">
-                <h4><a href="#">{{ blog.title }}</a></h4>
+                <h4><a href="{% url 'post-details' blog.id %}">{{ blog.title }}</a></h4>
                 <p>{{ blog.created_at|date:"F d, Y" }}</p>
-                <p>{{ blog.content|truncatewords:25 }}</p>
-                <a href="#">Read more</a>
+                <p>{{ blog.content|safe|truncatewords:25 }}</p>
+                <a href="{% url 'post-details' blog.id %}">Read more</a>
             </div>
             {% empty %}
             <p>No blogs yet.</p>
