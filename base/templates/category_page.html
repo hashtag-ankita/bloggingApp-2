@@ -1,0 +1,28 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="post-container">
+    <div class="category-header">
+        <h2>Category page: {{ category.name }}</h2>
+    </div>
+
+    {% if posts %}
+    {% for post in posts %}
+    <div class="post-group">
+        <a href="{% url 'post-details' post.id %}">
+            <h4 class="post-title">{{ post.title|title }}</h4>
+        </a>
+        <p class="post-author">by <a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a></p>
+        <p class="post-date">Published on {{ post.created_at|date }}</p>
+        <p class="post-content">{{ post.content|safe|truncatewords:50|linebreaks }}<a
+                href="{% url 'post-details' post.id %}" class="read-more">Read
+                More...</a></p>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p>No posts found in this category yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

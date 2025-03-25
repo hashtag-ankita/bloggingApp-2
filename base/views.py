@@ -131,3 +131,15 @@ def viewPost(request, post_id):
         'blogs': blogs,
     }
     return render(request, 'post_details.html', context)
+
+def viewCategory(request, category_name):
+    category = get_object_or_404(Category, name=category_name)
+    posts = Post.objects.filter(category=category)
+    context = {
+        'category': category,
+        'posts': posts,
+    }
+    return render(request, 'category_page.html', context)
+
+def viewTag(request, tag_id):
+    pass

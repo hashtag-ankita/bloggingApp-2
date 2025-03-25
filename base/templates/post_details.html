@@ -16,7 +16,7 @@
     </div>
 
     <div class="post-category">
-        <p>Category: <a href="#">{{ post.category.name }}</a></p>
+        <p>Category: <a href="{% url 'category' post.category.name %}">{{ post.category.name }}</a></p>
     </div>
 
     <div class="post-tags">
