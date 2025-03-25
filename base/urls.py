@@ -14,6 +14,7 @@ urlpatterns = [
 
     path('create/', views.createPost, name='create-post'),
     path('add_category/', views.addCategory, name='add-category'),
+    path('post-details/<str:post_id>/', views.viewPost, name='post-details'),
 ]
 
 if settings.DEBUG:

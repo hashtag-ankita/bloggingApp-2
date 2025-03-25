@@ -90,9 +90,9 @@ def createPost(request):
 
             post.save()
 
-            return redirect('home') # redirect to the home page on successful submission
+            return redirect('post-details', post_id=post.id) # redirect to the home page on successful submission
         else:
-            return redirect(request, 'create_post.html', {'form': form})
+            return render(request, 'create_post.html', {'form': form})
     else:
         form = PostForm()
         return render(request, 'create_post.html', {'form': form})
@@ -122,3 +122,12 @@ def addCategory(request):
     else:
         form = CategoryForm()
     return render(request, 'add_category.html', {'form': form})
+
+def viewPost(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    blogs = Post.objects.filter(author=post.author)
+    context = {
+        'post': post,
+        'blogs': blogs,
+    }
+    return render(request, 'post_details.html', context)
