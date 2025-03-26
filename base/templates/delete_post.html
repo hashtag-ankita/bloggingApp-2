@@ -1,0 +1,34 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="delete-container">
+    <form action="" method="post">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}" class="{{ field.name }}">
+                {% if field.errors %}
+                <span class="error">{{ field.errors }}</span>
+                {% endif %}
+
+                <span class="help-text">
+                    {% if field.name == 'password' %}
+                    To confirm it's you, type your password:
+                    {% else %}
+                    {{ field.label }}
+                    {% endif %}
+                </span>
+                {{ field }}
+            </label>
+        </div>
+        {% endfor %}
+
+        <br>
+        <button type="submit" class="btn btn-primary">Delete</button>
+        <a href="{% url 'post-details' post.id %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+{% endblock %}

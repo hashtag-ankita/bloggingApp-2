@@ -173,3 +173,26 @@ class CategoryForm(forms.ModelForm):
         if Category.objects.filter(name__iexact=name).exists(): # Case-insensitive check
             raise forms.ValidationError("This category name already exists!")
         return name # Return the cleaned category name
+    
+
+class ConfirmationForm(forms.Form):
+    # This form is used to confirm actions that require user confirmation
+    # such as deleting an account or a post
+    class Meta:
+        fields = ['password', 'confirmation']
+
+    password = forms.CharField(
+        required=True,
+        widget=forms.PasswordInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Confirm your password',
+            'autofocus': True,
+        })
+    )
+    confirmation = forms.BooleanField(
+        required=True,
+        label="I understand and confirm this action",
+        widget=forms.CheckboxInput(attrs={
+            'class': 'form-check-input',
+        })
+    )

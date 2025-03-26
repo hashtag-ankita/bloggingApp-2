@@ -30,6 +30,13 @@
             {% endif %}
         </p>
     </div>
+
+    <div class="edit-post">
+        {% if request.user == post.author %}
+        <a href="#" class="edit-btn" style="text-decoration: none;">[Edit Post]</a>
+        <a href="{% url 'delete-post' post.id %}" class="delete-btn" style="text-decoration: none;">[Delete Post]</a>
+        {% endif %}
+    </div>
 </div>
 
 <div class="post-author-card">

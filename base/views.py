@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import SignupForm, LoginForm, PostForm, CategoryForm, EditProfileForm
+from .forms import SignupForm, LoginForm, PostForm, CategoryForm, EditProfileForm, ConfirmationForm
 from .models import CustomUser, Post, Category, Tag
 
 # Create your views here.
@@ -122,6 +122,24 @@ def addCategory(request):
     else:
         form = CategoryForm()
     return render(request, 'add_category.html', {'form': form})
+
+@login_required(login_url='login')
+def deletePost(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user == post.author:
+        form = ConfirmationForm(request.POST or None)
+        
+        if form.is_valid():
+            post.delete()
+            return redirect('home')
+        else:
+            return render(request, 'delete_post.html', {'form': form, 'post': post})
+    else:
+        return render(request, 'delete_post.html', {'error': 'You are not authorized to delete this post!'})
+    
+@login_required(login_url='login')
+def editPost(request, post_id):
+    pass
 
 def viewPost(request, post_id):
     post = get_object_or_404(Post, id=post_id)
