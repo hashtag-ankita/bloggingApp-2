@@ -124,7 +124,7 @@ def addCategory(request):
 @login_required(login_url='login')
 def deletePost(request, post_id):
     try:
-        post = Post.objects.get(id=post_id)
+        post = Post.objects.get(id=post_id, author=request.user)
     except Post.DoesNotExist:
         post = None
         return render(request, 'error_page.html', {'error': 'The post or profile you’re looking for might have been deleted.', 'error_type': 'not_found'})
@@ -136,8 +136,14 @@ def deletePost(request, post_id):
         form = ConfirmationForm(request.POST or None)
         
         if form.is_valid():
-            post.delete()
-            return redirect('home')
+            password = form.cleaned_data.get("password")
+
+            if request.user.check_password(password):
+                post.delete()
+                return redirect('home')
+            else:
+                form.add_error(None, 'Wrong password! Try again.')
+                return render(request, 'delete_post.html', {'form': form, 'post': post})
         else:
             return render(request, 'delete_post.html', {'form': form, 'post': post})
     elif request.method == 'GET':
