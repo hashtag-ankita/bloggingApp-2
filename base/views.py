@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
-from .forms import SignupForm, LoginForm, PostForm, CategoryForm, EditProfileForm
+from .forms import SignupForm, LoginForm, PostForm, CategoryForm, EditProfileForm, ConfirmationForm
 from .models import CustomUser, Post, Category, Tag
 
 # Create your views here.
@@ -90,17 +90,15 @@ def createPost(request):
 
             post.save()
 
-            return redirect('home') # redirect to the home page on successful submission
+            return redirect('post-details', post_id=post.id) # redirect to the home page on successful submission
         else:
-            return redirect(request, 'create_post.html', {'form': form})
+            return render(request, 'create_post.html', {'form': form})
     else:
         form = PostForm()
         return render(request, 'create_post.html', {'form': form})
 
 @login_required(login_url='login')
 def editProfile(request):
-    # user = request.user
-    
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
@@ -122,3 +120,85 @@ def addCategory(request):
     else:
         form = CategoryForm()
     return render(request, 'add_category.html', {'form': form})
+
+@login_required(login_url='login')
+def deletePost(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        post = None
+        return render(request, 'error_page.html', {'error': 'The post or profile you’re looking for might have been deleted.', 'error_type': 'not_found'})
+
+    if request.user != post.author:
+        return render(request, 'error_page.html', {'error': 'You are not authorized to edit this post!', 'error_type': 'unauthorized'})
+    
+    if request.user == post.author and request.method == 'POST':
+        form = ConfirmationForm(request.POST or None)
+        
+        if form.is_valid():
+            post.delete()
+            return redirect('home')
+        else:
+            return render(request, 'delete_post.html', {'form': form, 'post': post})
+    elif request.method == 'GET':
+        form = ConfirmationForm()
+        return render(request, 'delete_post.html', {'form': form, 'post': post})
+    else:
+        return render(request, 'error_page.html', {'error': 'You are not authorized to delete this post!', 'error_type': 'unauthorized'})
+    
+@login_required(login_url='login')
+def editPost(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        post = None
+        return render(request, 'error_page.html', {'error': 'The post or profile you’re looking for might have been deleted.', 'error_type': 'not_found'})
+    
+    if request.user != post.author:
+        return render(request, 'error_page.html', {'error': 'You are not authorized to edit this post!', 'error_type': 'unauthorized'})
+
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        
+        if form.is_valid():
+            post.save()
+            return redirect('post-details', post_id=post.id)
+        else:
+            return render(request, 'create_post.html', {'form': form, 'post': post})
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'create_post.html', {'form': form, 'edit': True})
+
+def viewPost(request, post_id):
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        post = None
+        return render(request, 'error_page.html', {'error': 'The post or profile you’re looking for might have been deleted.', 'not_found': True})
+    if post is None:
+        return render(request, 'error_page.html', {'error': 'The post or profile you’re looking for might have been deleted.', 'error_type': 'not_found'})
+
+    blogs = Post.objects.filter(author=post.author)
+    context = {
+        'post': post,
+        'blogs': blogs,
+    }
+    return render(request, 'post_details.html', context)
+
+def viewCategory(request, category_name):
+    category = get_object_or_404(Category, name=category_name)
+    posts = Post.objects.filter(category=category)
+    context = {
+        'category': category,
+        'posts': posts,
+    }
+    return render(request, 'category_page.html', context)
+
+def viewTag(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    posts = Post.objects.filter(tags=tag)
+    context = {
+        'tag': tag,
+        'posts': posts,
+    }
+    return render(request, 'tag_page.html', context)

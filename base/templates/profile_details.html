@@ -1,6 +1,7 @@
 <!-- profile_page.html -->
 {% extends 'main.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 <style>
@@ -89,7 +90,7 @@
         <div class="profile-details-card">
             <h3>About</h3>
             <p><strong>Display name:</strong> {{ user.display_name }}</p>
-            <p><strong>Bio:</strong> {{ user.bio|default:"No bio added." }}</p>
+            <p><strong>Bio:</strong> {{ user.bio|markdown_text|safe|default:"No bio added." }}</p>
             <p><strong>Followers:</strong> 0</p>
             <p><strong>Following:</strong> 0</p>
         </div>
@@ -98,10 +99,10 @@
             <h3>Blogs ({{ blogs.count }})</h3>
             {% for blog in blogs.all %}
             <div class="blog-card">
-                <h4><a href="#">{{ blog.title }}</a></h4>
+                <h4><a href="{% url 'post-details' blog.id %}">{{ blog.title }}</a></h4>
                 <p>{{ blog.created_at|date:"F d, Y" }}</p>
-                <p>{{ blog.content|truncatewords:25 }}</p>
-                <a href="#">Read more</a>
+                <p>{{ blog.content|markdown_text|safe|truncatewords:25 }}</p>
+                <a href="{% url 'post-details' blog.id %}">Read more</a>
             </div>
             {% empty %}
             <p>No blogs yet.</p>

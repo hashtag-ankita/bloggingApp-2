@@ -1,11 +1,13 @@
+{% load custom_filters %}
+
 {% for post in posts %}
 <div class="post-group">
-    <a href="#">
+    <a href="{% url 'post-details' post.id %}">
         <h4 class="post-title">{{ post.title|title }}</h4>
     </a>
     <p class="post-author">by <a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a></p>
     <p class="post-date">Published on {{ post.created_at|date }}</p>
-    <p class="post-content">{{ post.content|truncatewords:50|linebreaks }}<a href="#" class="read-more">Read
+    <p class="post-content">{{ post.content|markdown_text|safe|truncatewords:50|linebreaks }}<a href="{% url 'post-details' post.id %}" class="read-more">Read
             More...</a></p>
 </div>
 {% endfor %}

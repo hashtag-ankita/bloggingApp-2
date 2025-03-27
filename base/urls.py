@@ -14,6 +14,13 @@ urlpatterns = [
 
     path('create/', views.createPost, name='create-post'),
     path('add_category/', views.addCategory, name='add-category'),
+
+    path('delete/<str:post_id>/', views.deletePost, name='delete-post'),
+    path('edit/<str:post_id>/', views.editPost, name='edit-post'),
+    
+    path('post-details/<str:post_id>/', views.viewPost, name='post-details'),
+    path('category/<str:category_name>/', views.viewCategory, name='category'),
+    path('tag/<str:tag_id>/', views.viewTag, name='tag'),
 ]
 
 if settings.DEBUG:
