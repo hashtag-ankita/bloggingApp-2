@@ -98,9 +98,6 @@ class EditProfileForm(forms.ModelForm):
         if commit:
             user.save()
         return user
-
-
-def convert_markdown(content):
         content = escape(content) # Escape any HTML for safety
         content = re.sub(r'\*\*(.*?)\*\*', r'<strong>\1</strong>', content)
         content = re.sub(r'\*(.*?)\*', r'<em>\1</em>', content)
@@ -150,10 +147,6 @@ class PostForm(forms.ModelForm):
         tags_input = self.cleaned_data.get('tags', '')
         tags_list = [tag.strip() for tag in tags_input.split(',') if tag.strip()]
         return tags_list # Return a list of clean tags
-    
-    def clean_content(self):
-        content = self.cleaned_data['content']
-        return convert_markdown(content)
     
 
 class CategoryForm(forms.ModelForm):

@@ -126,7 +126,7 @@ def addCategory(request):
 @login_required(login_url='login')
 def deletePost(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    if request.user == post.author:
+    if request.user == post.author and request.method == 'POST':
         form = ConfirmationForm(request.POST or None)
         
         if form.is_valid():
@@ -134,12 +134,26 @@ def deletePost(request, post_id):
             return redirect('home')
         else:
             return render(request, 'delete_post.html', {'form': form, 'post': post})
+    elif request.method == 'GET':
+        form = ConfirmationForm()
+        return render(request, 'delete_post.html', {'form': form, 'post': post})
     else:
-        return render(request, 'delete_post.html', {'error': 'You are not authorized to delete this post!'})
+        return render(request, 'error_page.html', {'error': 'You are not authorized to delete this post!'})
     
 @login_required(login_url='login')
 def editPost(request, post_id):
-    pass
+    post = get_object_or_404(Post, id=post_id, author=request.user)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        
+        if form.is_valid():
+            post.save()
+            return redirect('post-details', post_id=post.id)
+        else:
+            return render(request, 'create_post.html', {'form': form, 'post': post})
+    else:
+        form = PostForm(instance=post)
+    return render(request, 'create_post.html', {'form': form, 'edit': True})
 
 def viewPost(request, post_id):
     post = get_object_or_404(Post, id=post_id)

@@ -1,5 +1,6 @@
 {% extends 'main.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block content %}
 
@@ -12,7 +13,7 @@
     </div>
 
     <div class="post-content">
-        {{ post.content|safe|linebreaks }}
+        {{ post.content|markdown_text|safe|linebreaks }}
     </div>
 
     <div class="post-category">
@@ -33,7 +34,7 @@
 
     <div class="edit-post">
         {% if request.user == post.author %}
-        <a href="#" class="edit-btn" style="text-decoration: none;">[Edit Post]</a>
+        <a href="{% url 'edit-post' post.id %}" class="edit-btn" style="text-decoration: none;">[Edit Post]</a>
         <a href="{% url 'delete-post' post.id %}" class="delete-btn" style="text-decoration: none;">[Delete Post]</a>
         {% endif %}
     </div>
