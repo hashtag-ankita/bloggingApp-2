@@ -43,8 +43,8 @@
 <div class="post-author-card">
     <h3>About the Author</h3>
     <a href="{% url 'profile' post.author.username %}">
-        {% if user.profile_picture %}
-        <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="profile-picture"
+        {% if post.author.profile_picture %}
+        <img src="{{ post.author.profile_picture.url }}" alt="Profile Picture" class="profile-picture"
             style="width: 90px; height: 90px; border-radius: 50%; aspect-ratio: 1; display: inline-block;">
         {% else %}
         <img src="{% static 'images/avatar.svg' %}" alt="Profile Picture" class="profile-picture"
@@ -53,7 +53,7 @@
         <div class="post-author-details" style="display: inline-block;">
             <h4>{{ post.author.display_name }} - @{{ post.author.username }}</h4>
     </a>
-    <p>{{ post.author.bio|default:"No bio added." }}</p>
+    <p>{{ post.author.bio|markdown_text|safe|default:"No bio added." }}</p>
     <p>Blogs Published: {{ blogs.count }}</p>
 </div>
 </div>

@@ -99,8 +99,6 @@ def createPost(request):
 
 @login_required(login_url='login')
 def editProfile(request):
-    # user = request.user
-    
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
@@ -125,7 +123,15 @@ def addCategory(request):
 
 @login_required(login_url='login')
 def deletePost(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        post = None
+        return render(request, 'error_page.html', {'error': 'The post or profile you’re looking for might have been deleted.', 'error_type': 'not_found'})
+
+    if request.user != post.author:
+        return render(request, 'error_page.html', {'error': 'You are not authorized to edit this post!', 'error_type': 'unauthorized'})
+    
     if request.user == post.author and request.method == 'POST':
         form = ConfirmationForm(request.POST or None)
         
@@ -138,11 +144,19 @@ def deletePost(request, post_id):
         form = ConfirmationForm()
         return render(request, 'delete_post.html', {'form': form, 'post': post})
     else:
-        return render(request, 'error_page.html', {'error': 'You are not authorized to delete this post!'})
+        return render(request, 'error_page.html', {'error': 'You are not authorized to delete this post!', 'error_type': 'unauthorized'})
     
 @login_required(login_url='login')
 def editPost(request, post_id):
-    post = get_object_or_404(Post, id=post_id, author=request.user)
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        post = None
+        return render(request, 'error_page.html', {'error': 'The post or profile you’re looking for might have been deleted.', 'error_type': 'not_found'})
+    
+    if request.user != post.author:
+        return render(request, 'error_page.html', {'error': 'You are not authorized to edit this post!', 'error_type': 'unauthorized'})
+
     if request.method == 'POST':
         form = PostForm(request.POST, instance=post)
         
@@ -156,7 +170,14 @@ def editPost(request, post_id):
     return render(request, 'create_post.html', {'form': form, 'edit': True})
 
 def viewPost(request, post_id):
-    post = get_object_or_404(Post, id=post_id)
+    try:
+        post = Post.objects.get(id=post_id)
+    except Post.DoesNotExist:
+        post = None
+        return render(request, 'error_page.html', {'error': 'The post or profile you’re looking for might have been deleted.', 'not_found': True})
+    if post is None:
+        return render(request, 'error_page.html', {'error': 'The post or profile you’re looking for might have been deleted.', 'error_type': 'not_found'})
+
     blogs = Post.objects.filter(author=post.author)
     context = {
         'post': post,
